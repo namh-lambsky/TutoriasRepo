@@ -232,7 +232,10 @@ class GUI(MDApp):
 
 #----Agendar tutorias------
 
-
+    asignatura=func.get_table(4)
+    tutor=func.get_table(2)
+    hora=func.get_table(6)
+    aula=func.get_table(7)
 if __name__ == "__main__":
     LabelBase.register(name="zapf",fn_regular="fonts/zapf.ttf")
     LabelBase.register(name="galliard",fn_regular="fonts/galliard-bt-bold.ttf")

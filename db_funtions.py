@@ -40,3 +40,7 @@ def login(email,password):
             if password==actual_password[0]:
                 user_can_enter=True
     return email_exists,user_can_enter
+
+def get_table(num):
+    lista=db.getTableInfo(num)
+    return lista
