@@ -200,6 +200,7 @@ class DAO:
                     return result
                 except Error as e:
                     print(f"Error al intentar la conexión: {e}")
+
     def get_password_by_email(self,email):
         if self.tutorDB.is_connected():
             cursor = self.tutorDB.cursor()
