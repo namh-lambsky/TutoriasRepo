@@ -1,0 +1,129 @@
+<IconListItem>
+    IconLeftWidget:
+        icon: root.icon
+
+MDScreen:
+    name:"signup"
+    md_bg_color: [1,0.98,0.91]
+    MDCard:
+        orientation: "vertical"
+        padding: 0, 0, 0 , "36dp"
+        size_hint: .95, .95
+        pos_hint: {"center_x": .5, "center_y": .5}
+        elevation: 4
+        md_bg_color:[0.66,0.82,0.73]
+        MDFloatLayout:
+            id:layout
+            MDIconButton:
+                pos_hint: {"center_x":.08,"center_y": .95}
+                user_font_size: "64sp"
+                icon:"arrow-left"
+                on_release:
+                    root.manager.transition.direction="left"
+                    root.manager.current="main"
+            Image:
+                source: "images/logoucentral.png"
+                size_hint: .8, .8
+                pos_hint: {"center_x":.51,"center_y": 0.90}
+            MDLabel:
+                text: "Hola!"
+                font_name:"zapf"
+                font_size:"23sp"
+                pos_hint: {'center_x': 0.2, 'center_y': 0.80}
+                halign:"center"
+            MDLabel:
+                text: "Crea una nueva cuenta para \nacceder al servicio!"
+                font_name:"zapf"
+                font_size:"23sp"
+                pos_hint: {'center_x': 0.625, 'center_y': 0.72}
+                halign:"left"
+            MDTextField:
+                id: newnombre
+                hint_text:"Nombre"
+                required: True
+                icon_left:"account-circle"
+                font_name:"zapf"
+                font_name_hint_text:"zapf"
+                size_hint: .75, None
+                pos_hint: {'center_x': 0.5,'center_y': 0.63}
+                helper_text:"Este campo es obligatorio"
+                helper_text_mode:"on_error"
+            MDTextField:
+                id:newemail
+                hint_text:"Correo Institucional"
+                required: True
+                icon_left:"account"
+                font_name:"zapf"
+                font_name_hint_text:"zapf"
+                size_hint: .75, None
+                pos_hint: {'center_x': 0.5,'center_y': 0.53}
+                helper_text:"Este campo es obligatorio"
+                helper_text_mode:"on_error"
+
+            ClickableTextFieldRound:
+                id:newpassword
+                size_hint: .75, None
+                pos_hint: {'center_x': 0.5,'center_y': 0.45}
+                hint_text: "Contraseña"
+                helper_text:"Este campo es obligatorio"
+
+            ClickableTextFieldRound:
+                id:verifypassword
+                size_hint: .75, None
+                pos_hint: {'center_x': 0.5,'center_y': 0.37}
+                hint_text: "Confirmar contraseña"
+                helper_text:"Este campo es obligatorio"
+
+            MDTextField:
+                id:cedula
+                hint_text:"Cédula"
+                icon_left:"card-account-details-outline"
+                font_name:"zapf"
+                font_name_hint_text:"zapf"
+                size_hint: .75, None
+                required: True
+                input_filter:'int'
+                pos_hint: {'center_x': 0.5,'center_y': 0.28}
+                helper_text:"Este campo es obligatorio"
+                helper_text_mode:"on_error"
+
+            MDTextField:
+                id: usertype
+                pos_hint: {'center_x': .5, 'center_y': .20}
+                size_hint_x: .75
+                hint_text: "Tipo de Usuario"
+                helper_text:"Este campo es obligatorio"
+                helper_text_mode:"on_error"
+                required: True
+                on_focus: if self.focus: app.menu.open()
+
+            MDTextField:
+                id:career_list
+                pos:(-6000,110)
+                size_hint_x: .75
+                hint_text: "Carrera cursada"
+                helper_text:"Este campo es obligatorio"
+                helper_text_mode:"on_error"
+                on_focus: if self.focus: app.menu_career.open()
+
+            MDTextField:
+                id:code
+                pos:(-6000,110)
+                size_hint_x: .75
+                hint_text: "Codigo de Tutor"
+                helper_text:"Este campo es obligatorio"
+                helper_text_mode:"on_error"
+                on_focus: if self.focus: app.menu_career.open()
+
+            MDRectangleFlatIconButton:
+                id:buttonsignup
+                text: "Registrarse"
+                text_color:"white"
+                icon: "login-variant"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [1,0.58,0.31]
+                pos_hint: {"center_x": 0.5, "center_y": 0.03}
+                on_release:app.save_data_signup()

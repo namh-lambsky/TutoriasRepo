@@ -1,0 +1,58 @@
+MDScreen:
+    name:"main"
+    md_bg_color: [1,0.98,0.91]
+    MDCard:
+        orientation: "vertical"
+        padding: 0, 0, 0 , "36dp"
+        size_hint: .95, .95
+        pos_hint: {"center_x": .5, "center_y": .5}
+        elevation: 4
+        md_bg_color:[0.66,0.82,0.73]
+        MDFloatLayout:
+            Image:
+                source: "images/logoucentral.png"
+                size_hint: 0.75, 0.20
+                pos_hint: {'center_x': 0.5,'center_y': 0.93}
+            Image:
+                source: "images/student.png"
+                size_hint: 1.3, 1.7
+                pos_hint: {'center_x': 0.5,'center_y': 0.65}
+            MDLabel:
+                text: "TUTORÍAS"
+                font_name:"zapf"
+                font_size:"23sp"
+                pos_hint: {'center_x':0.5,'center_y': 0.42}
+                halign:"center"
+            MDLabel:
+                text: "¡Agenda facilmente tus tutorias \nmediante esta app!"
+                font_name:"zapf"
+                font_size:"18sp"
+                pos_hint: {'center_x':0.5,'center_y': 0.36}
+                halign:"center"
+            MDRectangleFlatIconButton:
+                id:menu
+                text: "INICIAR SESIÓN"
+                text_color:"white"
+                icon: "account-key"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [0.42,0.64,0.54]
+                pos_hint: {"center_x": 0.5, "center_y": 0.27}
+                on_release:
+                    root.manager.transition.direction="left"
+                    root.manager.current="login"
+            MDRectangleFlatIconButton:
+                text: "REGISTRARSE"
+                text_color:"white"
+                icon: "account-plus"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [1,0.58,0.31]
+                pos_hint: {"center_x": 0.5, "center_y": 0.19}
+                on_release:
+                    root.manager.transition.direction="right"
+                    root.manager.current="signup"

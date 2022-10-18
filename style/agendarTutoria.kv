@@ -1,0 +1,56 @@
+MDScreen:
+    name:"agendarTutoria"
+    md_bg_color: [1,0.98,0.91]
+    MDCard:
+        orientation: "vertical"
+        padding: 0, 0, 0 , "36dp"
+        size_hint: .95, .95
+        pos_hint: {"center_x": .5, "center_y": .5}
+        elevation: 4
+        md_bg_color:[0.66,0.82,0.73]
+        MDFloatLayout:
+            MDIconButton:
+                pos_hint: {"center_x":.08,"center_y": .95}
+                user_font_size: "64sp"
+                icon:"arrow-left"
+                on_release:
+                    root.manager.transition.direction="left"
+                    root.manager.current="inicio"
+            Image:
+                source: "images/logoucentral.png"
+                size_hint: 0.8, 0.8
+                pos_hint: {'center_x': 0.50,'center_y': 0.84}
+            #dropbox de asignatura
+            MDTextField:
+                id:asignatura
+                pos_hint: {'center_x': .5, 'center_y': .70}
+                size_hint_x: .75
+                hint_text: "Asignatura"
+                on_focus: if self.focus: app.menu.open()
+            #dropbox tutor
+            MDTextField:
+                id: tutor
+                pos_hint: {'center_x': .5, 'center_y': .60}
+                size_hint_x: .75
+                hint_text: "Tutor"
+                on_focus: if self.focus: app.menu.open()
+
+            MDTextField:
+                id: aula
+                pos_hint: {'center_x': .5, 'center_y': .5}
+                size_hint_x: .75
+                hint_text: "Aula"
+                on_focus: if self.focus: app.menu.open()
+            MDRectangleFlatIconButton:
+                text: "Confirmar tutoría"
+                text_color:"white"
+                icon: "account-key"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [0.42,0.64,0.54]
+                pos_hint: {"center_x": 0.5, "center_y": 0.20}
+                on_release:
+                    root.manager.transition.direction="right"
+                    root.manager.current="Inicio"

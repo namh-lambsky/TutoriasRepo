@@ -1,0 +1,99 @@
+<ClickableTextFieldRound>:
+    size_hint_y: None
+    height: text_field.height
+
+    MDTextField:
+        id: text_field
+        hint_text: root.hint_text
+        text: root.text
+        required: True
+        password: True
+        helper_text:root.helper_text
+        helper_text_mode:"on_error"
+        icon_left: "key-variant"
+
+    MDIconButton:
+        icon: "eye-off"
+        pos_hint: {"center_y": .5}
+        pos: text_field.width - self.width + dp(8), 0
+        theme_text_color: "Hint"
+        on_release:
+            self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+            text_field.password = False if text_field.password is True else True
+
+MDScreen:
+    name:"login"
+    md_bg_color: [1,0.98,0.91]
+    MDCard:
+        orientation: "vertical"
+        padding: 0, 0, 0 , "36dp"
+        size_hint: .95, .95
+        pos_hint: {"center_x": .5, "center_y": .5}
+        elevation: 4
+        md_bg_color:[0.66,0.82,0.73]
+        MDFloatLayout:
+            MDIconButton:
+                pos_hint: {"center_x":.08,"center_y": .95}
+                user_font_size: "64sp"
+                icon:"arrow-left"
+                on_release:
+                    root.manager.transition.direction="right"
+                    root.manager.current="main"
+            Image:
+                source: "images/logoucentral.png"
+                size_hint: 0.8, 0.8
+                pos_hint: {'center_x': 0.50,'center_y': 0.84}
+            MDLabel:
+                text: "Ingresa"
+                font_name:"zapf"
+                font_size:"32sp"
+                pos_hint: {'center_x': 0.60, 'center_y': 0.65}
+            MDLabel:
+                text: "Correo"
+                font_name:"zapf"
+                font_size:"25sp"
+                pos_hint: {'center_x': 0.60, 'center_y': 0.55}
+
+            MDTextField:
+                id:emailEstablecido
+                hint_text:"Correo Institucional"
+                icon_left:"account"
+                font_name:"zapf"
+                font_name_hint_text:"zapf"
+                size_hint: .75, None
+                pos_hint: {'center_x': 0.50, 'center_y': 0.47}
+                helper_text:"Este campo es obligatorio"
+                helper_text_mode:"on_error"
+            MDLabel:
+                text: "Contraseña"
+                font_name:"zapf"
+                font_size:"25sp"
+                pos_hint: {'center_x': 0.60, 'center_y': 0.37}
+            ClickableTextFieldRound:
+                id:passwordEstablecida
+                size_hint: .75, None
+                pos_hint: {'center_x': 0.5,'center_y': 0.3}
+                hint_text: "Contraseña"
+                helper_text:"Este campo es obligatorio"
+            MDRectangleFlatIconButton:
+                text: "Iniciar sesión"
+                text_color:"white"
+                icon: "login-variant"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [1,0.58,0.31]
+                pos_hint: {"center_x": 0.5, "center_y": 0.20}
+                on_release: if app.save_data_login()==True: root.manager.transition.direction="left"; root.manager.current="Inicio";
+            MDRectangleFlatIconButton:
+                text: "Recordar contraseña"
+                text_color:"white"
+                icon: "lock-question"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+
+                size_hint: .6, .02
+                md_bg_color: [0.42,0.64,0.54]
+                pos_hint: {"center_x": 0.5, "center_y": 0.10}

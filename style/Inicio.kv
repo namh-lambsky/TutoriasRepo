@@ -1,0 +1,44 @@
+MDScreen:
+    name:"Inicio"
+    md_bg_color: [1,0.98,0.91]
+    MDCard:
+        orientation: "vertical"
+        padding: 0, 0, 0 , "36dp"
+        size_hint: .95, .95
+        pos_hint: {"center_x": .5, "center_y": .5}
+        elevation: 4
+        md_bg_color:[0.66,0.82,0.73]
+        MDFloatLayout:
+            MDIconButton:
+                pos_hint: {"center_x":.08,"center_y": .95}
+                user_font_size: "64sp"
+                icon:"arrow-left"
+                on_release:
+                    root.manager.transition.direction="left"
+                    root.manager.current="main"
+            MDRectangleFlatIconButton:
+                text: "Calendario"
+                text_color:"white"
+                icon: "account-key"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [0.42,0.64,0.54]
+                pos_hint: {"center_x": 0.5, "center_y": 0.70}
+                on_release:
+                    root.manager.transition.direction="left"
+                    app.show_date_picker()
+            MDRectangleFlatIconButton:
+                text: "Agendar una tutoría"
+                text_color:"white"
+                icon: "account-key"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [0.42,0.64,0.54]
+                pos_hint: {"center_x": 0.5, "center_y": 0.27}
+                on_release:
+                    root.manager.transition.direction="left"
+                    root.manager.current="agendarTutoria"
