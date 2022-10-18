@@ -120,18 +120,6 @@ class DAO:
                     print("¡Nuevo salon ingresado con exito!")
                 except Error as e:
                     print(f"Error al crear el dato: {e}")
-            elif table == 8:
-                try:
-                    sqlInstruction = "INSERT INTO careers(id_career,career_name) VALUES ('{0}','{1}')"
-                    cursor.execute(
-                        sqlInstruction.format(
-                            obj.get_id_career(), obj.get_career_name()
-                        )
-                    )
-                    self.tutorDB.commit()
-                    print("¡Nueva carrera ingresada con exito!")
-                except Error as e:
-                    print(f"Error al crear el dato: {e}")
 
     # ------------------------------------------Función Read-------------------------------------
     def getTableInfo(self, table):
