@@ -32,17 +32,15 @@ def login(email,password):
     email_exists=False
     user_can_enter=False
     users=db.getTableInfo(0)
-    print(users)
     for user in users:
         if user[1]==email:
             email_exists=True
             actual_password=db.get_password_by_email(email)
             if password==actual_password[0]:
                 user_can_enter=True
-                return True
-            else:
-                return False
-    #return email_exists,user_can_enter
+                #return True
+               # return False
+    return email_exists,user_can_enter
 
 def get_table(num):
     lista=db.getTableInfo(num)
@@ -51,7 +49,8 @@ def get_table(num):
 def email_exists(email):
     email_db=db.get_email(email)
     print(email_db)
-    if email_db[0]==email:
-        return True
-    else:
-        return False
+    if email_db is not None:
+        if email_db[0]==email:
+            return True
+        else:
+            return False

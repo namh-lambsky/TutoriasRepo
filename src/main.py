@@ -145,13 +145,13 @@ class GUI(MDApp):
             self.career_id=3
         self.menu_career.dismiss()
 
-    def show_alert_dialog(self,text):
+    def show_alert_dialog(self,text,bt_text):
         if not self.dialog:
             self.dialog = MDDialog(
                 text=text,
                 buttons=[
                     MDFlatButton(
-                        text="Intentar de nuevo",
+                        text=bt_text,
                         theme_text_color="Custom",
                         on_release=self.close_dialog
                     )
@@ -219,9 +219,11 @@ class GUI(MDApp):
         if self.pass_verifier and self.id_verifier and self.email_verifier:
             if self.account_type==1:
                 func.new_user(cedula,email,verifypass1,nombre,self.account_type,career_id=self.career_id)
+                self.show_alert_dialog("La cuenta fue creada de manera exitosa!","Continuar a Inicio Sesion")
                 return True
             elif self.account_type==2:
                 func.new_user(cedula,email,verifypass1,nombre,self.account_type,tutor_c=self.tutor_code)
+                self.show_alert_dialog("La cuenta fue creada de manera exitosa!","Continuar a Inicio Sesion")
                 return True
         else:
             return False
@@ -247,9 +249,9 @@ class GUI(MDApp):
         if self.verifier:
             comp=func.login(email_log,password_log)
             if comp[0]==False:
-                self.show_alert_dialog("El email no se encuentra registrado!")
+                self.show_alert_dialog("El email no se encuentra registrado!","Intentar de nuevo")
             elif comp[1]==False:
-                self.show_alert_dialog("La contraseña no corresponde al usuario registrado!")
+                self.show_alert_dialog("La contraseña no corresponde al usuario registrado!","Intentar de nuevo")
             else:
                 user_logged=True
         return user_logged
