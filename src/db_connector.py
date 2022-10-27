@@ -18,7 +18,7 @@ class DAO:
     # ------------------------------------------Función Create-------------------------------------
     def newObject(self, table, obj):
         if self.tutorDB.is_connected():
-            cursor = self.tutorDB.cursor()
+            cursor = self.tutorDB.cursor(buffered=True)
             if table == 0:
                 try:
                     sqlInstruction = "INSERT INTO users(user_id, email, password, name, account_type_id) VALUES ('{0}','{1}','{2}','{3}','{4}')"
@@ -199,6 +199,18 @@ class DAO:
                 return result
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
+
+    def get_email(self,email):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor(buffered=True)
+            try:
+                sql_ins="SELECT email FROM users where email='{0}'".format(email)
+                cursor.execute(sql_ins)
+                result = cursor.fetchone()
+                return result
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+
     # ------------------------------------------Función Update-------------------------------------
     def updateData(self, table, obj):
         if self.tutorDB.is_connected():

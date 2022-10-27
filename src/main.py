@@ -16,7 +16,7 @@ from kivy.clock import Clock
 from kivymd.uix.dialog import MDDialog
 from kivymd.uix.button import MDFlatButton
 import re
-import db_funtions as func
+import db_functions as func
 
 Window.size=(412,800)
 
@@ -32,8 +32,11 @@ class GUI(MDApp):
     def build(self):
         self.theme_cls.primary_palette = "Green"
         self.theme_cls.primary_hue='700'
+        carrer_list=func.get_table(4)
         self.account_type=None
-        self.verifier=False
+        self.pass_verifier=False
+        self.id_verifier=False
+        self.email_verifier=False
         self.career_id=None
         self.tutor_code=None
         self.dialog=None
@@ -155,7 +158,7 @@ class GUI(MDApp):
                 ],
             )
         self.dialog.open()
-    
+
     def close_dialog(self,ob):
         self.dialog.dismiss()
 
@@ -165,13 +168,28 @@ class GUI(MDApp):
         else:
             return False
 
+    def valid_id(self):
+        id=self.screen_manager.get_screen("signup").ids.cedula.text
+        id_pattern=re.compile(r"[0-9]{7,11}")
+        if re.fullmatch(id_pattern,id):
+            self.id_verifier= True
+        else:
+            self.id_verifier= False
+            self.screen_manager.get_screen("signup").ids.cedula.helper_text="La cedula debe contener entre 7 y 11 carácteres"
+            self.screen_manager.get_screen("signup").ids.cedula.error=True
+
     def verify_email_signup(self):
         emailConfirmPattern=re.compile(r"^[A-Za-z0-9]+@ucentral\.edu\.co$")
         text=self.screen_manager.get_screen("signup").ids.newemail.text
         if re.fullmatch(emailConfirmPattern,text):
-            self.verifier= True
+            if self.email_exists(text):
+                self.email_verifier= False
+                self.screen_manager.get_screen("signup").ids.newemail.helper_text="el correo ya fue utilizado en otra cuenta!"
+                self.screen_manager.get_screen("signup").ids.newemail.error=True
+            else:
+                self.email_verifier= True
         else:
-            self.verifier= False
+            self.email_verifier= False
             self.screen_manager.get_screen("signup").ids.newemail.helper_text="el correo instucional debe ser de la(ej. correo@ucentral.edu.co)"
             self.screen_manager.get_screen("signup").ids.newemail.error=True
 
@@ -180,9 +198,9 @@ class GUI(MDApp):
         verifypass2 = self.screen_manager.get_screen("signup").ids.verifypassword.ids.text_field.text
 
         if verifypass1 == verifypass2:
-            self.verifier= True
+            self.pass_verifier= True
         else:
-            self.verifier= False
+            self.pass_verifier= False
             self.screen_manager.get_screen("signup").ids.verifypassword.helper_text="Las contraseñas no coinciden"
             self.screen_manager.get_screen("signup").ids.verifypassword.ids.text_field.error=True
 
@@ -197,18 +215,25 @@ class GUI(MDApp):
         self.tutor_code=codeT
         self.verify_email_signup()
         self.verify_password_signup()
-        if self.verifier:
+        self.valid_id()
+        if self.pass_verifier and self.id_verifier and self.email_verifier:
             if self.account_type==1:
                 func.new_user(cedula,email,verifypass1,nombre,self.account_type,career_id=self.career_id)
+                return True
             elif self.account_type==2:
                 func.new_user(cedula,email,verifypass1,nombre,self.account_type,tutor_c=self.tutor_code)
+                return True
+        else:
+            return False
 
+    def email_exists(self,email):
+        return func.email_exists(email)
     #---Login----
     def verify_email_login(self):
         emailConfirmPattern=re.compile(r"^[A-Za-z0-9]+@ucentral\.edu\.co$")
         text=self.screen_manager.get_screen("login").ids.emailEstablecido.text
         if re.fullmatch(emailConfirmPattern,text):
-            self.verifier= True
+            self.verifier=True
         else:
             self.verifier= False
             self.screen_manager.get_screen("login").ids.emailEstablecido.helper_text="el correo instucional debe ser de la(ej. correo@ucentral.edu.co)"
