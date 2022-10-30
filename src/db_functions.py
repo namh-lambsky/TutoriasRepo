@@ -38,9 +38,9 @@ def login(email,password):
             actual_password=db.get_password_by_email(email)
             if password==actual_password[0]:
                 user_can_enter=True
-                #return True
-               # return False
-    return email_exists,user_can_enter
+                return True
+            else: return False
+    #return email_exists,user_can_enter
 
 def get_table(num):
     lista=db.getTableInfo(num)
