@@ -168,21 +168,19 @@ class GUI(MDApp):
         else:
             return False
 
-    def valid_id(self):
-        id=self.screen_manager.get_screen("signup").ids.cedula.text
-        id_pattern=re.compile(r"[0-9]{7,11}")
-        if re.fullmatch(id_pattern,id):
+    def valid_id(self,cedula):
+        id_pattern=re.compile(r"[0-9]{6,11}")
+        if re.fullmatch(id_pattern,cedula):
             self.id_verifier= True
         else:
             self.id_verifier= False
-            self.screen_manager.get_screen("signup").ids.cedula.helper_text="La cedula debe contener entre 7 y 11 carácteres"
+            self.screen_manager.get_screen("signup").ids.cedula.helper_text="La cedula debe contener entre 6 y 11 carácteres"
             self.screen_manager.get_screen("signup").ids.cedula.error=True
 
-    def verify_email_signup(self):
+    def verify_email_signup(self,email):
         emailConfirmPattern=re.compile(r"^[A-Za-z0-9]+@ucentral\.edu\.co$")
-        text=self.screen_manager.get_screen("signup").ids.newemail.text
-        if re.fullmatch(emailConfirmPattern,text):
-            if self.email_exists(text):
+        if re.fullmatch(emailConfirmPattern,email):
+            if self.email_exists(email):
                 self.email_verifier= False
                 self.screen_manager.get_screen("signup").ids.newemail.helper_text="el correo ya fue utilizado en otra cuenta!"
                 self.screen_manager.get_screen("signup").ids.newemail.error=True
@@ -190,13 +188,10 @@ class GUI(MDApp):
                 self.email_verifier= True
         else:
             self.email_verifier= False
-            self.screen_manager.get_screen("signup").ids.newemail.helper_text="el correo instucional debe ser de la(ej. correo@ucentral.edu.co)"
+            self.screen_manager.get_screen("signup").ids.newemail.helper_text="el correo instucional debe ser como correo@ucentral.edu.co"
             self.screen_manager.get_screen("signup").ids.newemail.error=True
 
-    def verify_password_signup(self):
-        verifypass1 = self.screen_manager.get_screen("signup").ids.newpassword.ids.text_field.text
-        verifypass2 = self.screen_manager.get_screen("signup").ids.verifypassword.ids.text_field.text
-
+    def verify_password_signup(self,verifypass1,verifypass2):
         if verifypass1 == verifypass2:
             self.pass_verifier= True
         else:
@@ -208,14 +203,13 @@ class GUI(MDApp):
         nombre=self.screen_manager.get_screen("signup").ids.newnombre.text
         email = self.screen_manager.get_screen("signup").ids.newemail.text
         verifypass1 = self.screen_manager.get_screen("signup").ids.newpassword.ids.text_field.text
+        verifypass2 = self.screen_manager.get_screen("signup").ids.verifypassword.ids.text_field.text
         cedula = self.screen_manager.get_screen("signup").ids.cedula.text
-        usertype = self.screen_manager.get_screen("signup").ids.usertype.text
-        careerlist = self.screen_manager.get_screen("signup").ids.career_list.text
         codeT = self.screen_manager.get_screen("signup").ids.code.text
         self.tutor_code=codeT
-        self.verify_email_signup()
-        self.verify_password_signup()
-        self.valid_id()
+        self.verify_email_signup(email)
+        self.verify_password_signup(verifypass1,verifypass2)
+        self.valid_id(cedula)
         if self.pass_verifier and self.id_verifier and self.email_verifier:
             if self.account_type==1:
                 func.new_user(cedula,email,verifypass1,nombre,self.account_type,career_id=self.career_id)
@@ -230,6 +224,7 @@ class GUI(MDApp):
 
     def email_exists(self,email):
         return func.email_exists(email)
+
     #---Login----
     def verify_email_login(self):
         emailConfirmPattern=re.compile(r"^[A-Za-z0-9]+@ucentral\.edu\.co$")
@@ -254,6 +249,7 @@ class GUI(MDApp):
                 self.show_alert_dialog("La contraseña no corresponde al usuario registrado!","Intentar de nuevo")
             else:
                 user_logged=True
+
         return user_logged
 
 
@@ -263,6 +259,7 @@ class GUI(MDApp):
     tutor=func.get_table(2)
     hora=func.get_table(6)
     aula=func.get_table(7)
+
 if __name__ == "__main__":
     LabelBase.register(name="zapf",fn_regular="fonts/zapf.ttf")
     LabelBase.register(name="galliard",fn_regular="fonts/galliard-bt-bold.ttf")
