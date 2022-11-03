@@ -32,27 +32,20 @@ MDScreen:
         elevation: 4
         md_bg_color:[0.66,0.82,0.73]
         MDFloatLayout:
-            MDIconButton:
-                pos_hint: {"center_x":.08,"center_y": .95}
-                user_font_size: "64sp"
-                icon:"arrow-left"
-                on_release:
-                    root.manager.transition.direction="right"
-                    root.manager.current="main"
             Image:
                 source: "images/logoucentral.png"
                 size_hint: 0.8, 0.8
-                pos_hint: {'center_x': 0.50,'center_y': 0.84}
+                pos_hint: {'center_x': 0.50,'center_y': 0.93}
             MDLabel:
                 text: "Ingresa"
                 font_name:"zapf"
                 font_size:"32sp"
-                pos_hint: {'center_x': 0.60, 'center_y': 0.65}
+                pos_hint: {'center_x': 0.55, 'center_y': 0.75}
             MDLabel:
                 text: "Correo"
                 font_name:"zapf"
                 font_size:"25sp"
-                pos_hint: {'center_x': 0.60, 'center_y': 0.55}
+                pos_hint: {'center_x': 0.60, 'center_y': 0.64}
 
             MDTextField:
                 id:emailEstablecido
@@ -61,18 +54,18 @@ MDScreen:
                 font_name:"zapf"
                 font_name_hint_text:"zapf"
                 size_hint: .75, None
-                pos_hint: {'center_x': 0.50, 'center_y': 0.47}
+                pos_hint: {'center_x': 0.50, 'center_y': 0.58}
                 helper_text:"Este campo es obligatorio"
                 helper_text_mode:"on_error"
             MDLabel:
                 text: "Contraseña"
                 font_name:"zapf"
                 font_size:"25sp"
-                pos_hint: {'center_x': 0.60, 'center_y': 0.37}
+                pos_hint: {'center_x': 0.60, 'center_y': 0.49}
             ClickableTextFieldRound:
                 id:passwordEstablecida
                 size_hint: .75, None
-                pos_hint: {'center_x': 0.5,'center_y': 0.3}
+                pos_hint: {'center_x': 0.5,'center_y': 0.43}
                 hint_text: "Contraseña"
                 helper_text:"Este campo es obligatorio"
             MDRectangleFlatIconButton:
@@ -84,7 +77,7 @@ MDScreen:
                 font_name:"zapf"
                 size_hint: .8, .02
                 md_bg_color: [1,0.58,0.31]
-                pos_hint: {"center_x": 0.5, "center_y": 0.20}
+                pos_hint: {"center_x": 0.5, "center_y": 0.25}
                 on_release: if app.save_data_login()==True: root.manager.transition.direction="left"; root.manager.current="Inicio";
             MDRectangleFlatIconButton:
                 text: "Recordar contraseña"
@@ -93,7 +86,18 @@ MDScreen:
                 icon_color:"white"
                 line_color:(0,0,0,0)
                 font_name:"zapf"
-
-                size_hint: .6, .02
+                size_hint: .8, .02
                 md_bg_color: [0.42,0.64,0.54]
-                pos_hint: {"center_x": 0.5, "center_y": 0.10}
+                pos_hint: {"center_x": 0.5, "center_y": 0.15}
+            MDLabel:
+                text: "¿No tienes una cuenta?"
+                font_name:"zapf"
+                pos_hint: {'center_x': 0.67, 'center_y': 0.05}
+            MDFlatButton:
+                text: "Registrate"
+                theme_text_color: "Custom"
+                text_color: [0.42,0.64,0.54]
+                pos_hint: {"center_x": 0.70, "center_y": 0.05}
+                on_release:
+                    root.manager.transition.direction="right"
+                    root.manager.current="signup"

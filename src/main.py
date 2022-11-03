@@ -37,9 +37,17 @@ class GUI(MDApp):
         self.pass_verifier=False
         self.id_verifier=False
         self.email_verifier=False
+
         self.career_id=None
         self.tutor_code=None
         self.dialog=None
+        self.asignatura=func.get_table(3)
+        self.tutor=func.get_users_by_type(2)
+        self.hora=func.get_table(6)
+        self.aula=func.get_table(7)
+        self.carrera=func.get_table(4)
+        print(self.tutor)
+
         self.dpdown_user_type_items=[
             {
                 "viewclass":  "IconListItem",
@@ -59,34 +67,51 @@ class GUI(MDApp):
         self.dpdown_career_items=[
             {
                 "viewclass":  "IconListItem",
-                "icon": "code-braces",
-                "text": "Ingeniería de Sistemas",
+                "icon": "book-education",
+                "text": f"{i[1]}",
                 "height": dp(56),
-                "on_release": lambda x="Ingeniería de Sistemas": self.set_item_career(x)
-            },
-            {
-                "viewclass":  "IconListItem",
-                "icon": "lightning-bolt",
-                "text": "Ingeniería Electrónica",
-                "height": dp(56),
-                "on_release": lambda x="Ingeniería Electrónica": self.set_item_career(x)
-            },
-            {
-                "viewclass":  "IconListItem",
-                "icon": "account-school",
-                "text": "Ingeniería Industrial",
-                "height": dp(56),
-                "on_release": lambda x="Ingeniería Industrial": self.set_item_career(x)
-            }
+                "on_release": lambda x=f"{i[1]}": self.set_item_career(x)
+            }for i in self.carrera
+           
         ]
-        self.dpdown_signature_items=[
+
+        self.dpdown_subject_items=[
+            {
+                "viewclass":  "IconListItem",
+                "icon": "bookshelf",
+                "text": f"{i[1]}",
+                "height": dp(56),
+                "on_release": lambda x=f"{i[1]}": self.set_item_subject(x)
+            }for i in self.asignatura
+        ]
+        self.dpdown_schedule_items=[
+            {
+                "viewclass":  "IconListItem",
+                "icon": "clock-outline",
+                "text": f"{i[1]}",
+                "height": dp(56),
+                "on_release": lambda x=f"{i[1]}": self.set_item_schedule(x)
+            }for i in self.hora
+        ]
+        self.dpdown_tutors_items=[
             {
                 "viewclass":  "IconListItem",
                 "icon": "account",
-                "text": "Maestro",
+                "text": f"{i[3]}",
                 "height": dp(56),
-                "on_release": lambda x="Maestro": self.set_item_user(x)
-            },
+                "on_release": lambda x=f"{i[3]}": self.set_item_tutors(x)
+            }for i in self.tutor
+
+        ]
+        self.dpdown_aula_items=[
+            {
+                "viewclass":  "IconListItem",
+                "icon": "town-hall",
+                "text": f"{i[1]}",
+                "height": dp(56),
+                "on_release": lambda x=f"{i[1]}": self.set_item_aula(x)
+            }for i in self.aula
+
         ]
         self.screen_manager = ScreenManager()
         self.screen_manager.add_widget(Builder.load_file("style/main.kv"))
@@ -106,8 +131,40 @@ class GUI(MDApp):
             items=self.dpdown_career_items,
             width_mult= 8,
         )
+        self.menu_subject = MDDropdownMenu(
+            caller=self.screen_manager.get_screen("agendarTutoria").ids.asignatura,
+            ver_growth="up",
+            hor_growth="right",
+            items=self.dpdown_subject_items,
+            width_mult= 8,
+        )
+        self.menu_schedule = MDDropdownMenu(
+            caller=self.screen_manager.get_screen("agendarTutoria").ids.schedule,
+            ver_growth="up",
+            hor_growth="right",
+            items=self.dpdown_schedule_items,
+            width_mult= 8,
+        )
+        self.menu_tutor = MDDropdownMenu(
+            caller=self.screen_manager.get_screen("agendarTutoria").ids.tutor,
+            ver_growth="up",
+            hor_growth="right",
+            items=self.dpdown_tutors_items,
+            width_mult= 8,
+        )
+        self.menu_aula = MDDropdownMenu(
+            caller=self.screen_manager.get_screen("agendarTutoria").ids.aula,
+            ver_growth="up",
+            hor_growth="right",
+            items=self.dpdown_aula_items,
+            width_mult= 8,
+        )
         self.menu_career.bind()
-        self.menu.bind()
+        self.menu_subject.bind()
+        self.menu_tutor.bind()
+        self.menu_aula.bind()
+        self.menu_schedule.bind()
+
 
         return self.screen_manager
     #Calendario
@@ -137,21 +194,26 @@ class GUI(MDApp):
 
     def set_item_career(self, text_item):
         self.screen_manager.get_screen("signup").ids.career_list.text=text_item
-        if text_item=="Ingeniería de Sistemas":
-            self.career_id=1
-        elif text_item=="Ingeniería Electrónica":
-            self.career_id=2
-        elif text_item=="Ingeniería Industrial":
-            self.career_id=3
-        self.menu_career.dismiss()
 
-    def show_alert_dialog(self,text,bt_text):
+    def set_item_subject(self, text_item):
+        self.screen_manager.get_screen("agendarTutoria").ids.asignatura.text=text_item
+
+    def set_item_schedule(self, text_item):
+        self.screen_manager.get_screen("agendarTutoria").ids.schedule.text=text_item
+
+    def set_item_tutors(self, text_item):
+        self.screen_manager.get_screen("agendarTutoria").ids.tutor.text=text_item
+
+    def set_item_aula(self, text_item):
+        self.screen_manager.get_screen("agendarTutoria").ids.aula.text=text_item
+
+    def show_alert_dialog(self,text):
         if not self.dialog:
             self.dialog = MDDialog(
                 text=text,
                 buttons=[
                     MDFlatButton(
-                        text=bt_text,
+                        text="Intentar de nuevo",
                         theme_text_color="Custom",
                         on_release=self.close_dialog
                     )
@@ -188,7 +250,7 @@ class GUI(MDApp):
                 self.email_verifier= True
         else:
             self.email_verifier= False
-            self.screen_manager.get_screen("signup").ids.newemail.helper_text="el correo instucional debe ser como correo@ucentral.edu.co"
+            self.screen_manager.get_screen("signup").ids.newemail.helper_text="El correo instucional debe ser correo@ucentral.edu.co"
             self.screen_manager.get_screen("signup").ids.newemail.error=True
 
     def verify_password_signup(self,verifypass1,verifypass2):
@@ -213,11 +275,9 @@ class GUI(MDApp):
         if self.pass_verifier and self.id_verifier and self.email_verifier:
             if self.account_type==1:
                 func.new_user(cedula,email,verifypass1,nombre,self.account_type,career_id=self.career_id)
-                self.show_alert_dialog("La cuenta fue creada de manera exitosa!","Continuar a Inicio Sesion")
                 return True
             elif self.account_type==2:
                 func.new_user(cedula,email,verifypass1,nombre,self.account_type,tutor_c=self.tutor_code)
-                self.show_alert_dialog("La cuenta fue creada de manera exitosa!","Continuar a Inicio Sesion")
                 return True
         else:
             return False
@@ -225,7 +285,7 @@ class GUI(MDApp):
     def email_exists(self,email):
         return func.email_exists(email)
 
-    #---Login----
+    #--------------Login---------------
     def verify_email_login(self):
         emailConfirmPattern=re.compile(r"^[A-Za-z0-9]+@ucentral\.edu\.co$")
         text=self.screen_manager.get_screen("login").ids.emailEstablecido.text
@@ -233,7 +293,7 @@ class GUI(MDApp):
             self.verifier=True
         else:
             self.verifier= False
-            self.screen_manager.get_screen("login").ids.emailEstablecido.helper_text="el correo instucional debe ser de la(ej. correo@ucentral.edu.co)"
+            self.screen_manager.get_screen("login").ids.emailEstablecido.helper_text="El correo instucional debe ser (ej. correo@ucentral.edu.co)"
             self.screen_manager.get_screen("login").ids.emailEstablecido.error=True
 
     def save_data_login(self):
@@ -244,21 +304,12 @@ class GUI(MDApp):
         if self.verifier:
             comp=func.login(email_log,password_log)
             if comp[0]==False:
-                self.show_alert_dialog("El email no se encuentra registrado!","Intentar de nuevo")
+                self.show_alert_dialog("El email no se encuentra registrado!")
             elif comp[1]==False:
-                self.show_alert_dialog("La contraseña no corresponde al usuario registrado!","Intentar de nuevo")
+                self.show_alert_dialog("La contraseña no corresponde al usuario registrado!")
             else:
                 user_logged=True
-
         return user_logged
-
-
-#----Agendar tutorias------
-
-    asignatura=func.get_table(4)
-    tutor=func.get_table(2)
-    hora=func.get_table(6)
-    aula=func.get_table(7)
 
 if __name__ == "__main__":
     LabelBase.register(name="zapf",fn_regular="fonts/zapf.ttf")

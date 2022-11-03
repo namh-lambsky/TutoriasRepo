@@ -12,6 +12,6 @@ def test_user_creation():
     assert db_functions.new_user(id,email,password,name,account_type,tutor_c=tutor_code)==True
 
 def test_user_login():
-    email="abeltrana@ucentral.edu.co"
-    password="abeltrana"
+    email="lcoltrane@ucentral.edu.co"
+    password="juegos.com"
     assert db_functions.login(email,password)==True

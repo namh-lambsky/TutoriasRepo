@@ -14,10 +14,16 @@ MDScreen:
         md_bg_color:[0.66,0.82,0.73]
         MDFloatLayout:
             id:layout
-            MDIconButton:
-                pos_hint: {"center_x":.08,"center_y": .95}
-                user_font_size: "64sp"
-                icon:"arrow-left"
+            MDRectangleFlatIconButton:
+                text: "Regresar"
+                text_color:"white"
+                icon: "keyboard-backspace"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [0.8,0.62,0.37]
+                pos_hint: {"center_x": 0.5, "center_y": 0.0010}
                 on_release:
                     root.manager.transition.direction="left"
                     root.manager.current="main"
@@ -56,21 +62,21 @@ MDScreen:
                 font_name:"zapf"
                 font_name_hint_text:"zapf"
                 size_hint: .75, None
-                pos_hint: {'center_x': 0.5,'center_y': 0.53}
+                pos_hint: {'center_x': 0.5,'center_y': 0.55}
                 helper_text:"Este campo es obligatorio"
                 helper_text_mode:"on_error"
 
             ClickableTextFieldRound:
                 id:newpassword
                 size_hint: .75, None
-                pos_hint: {'center_x': 0.5,'center_y': 0.45}
+                pos_hint: {'center_x': 0.5,'center_y': 0.47}
                 hint_text: "Contraseña"
                 helper_text:"Este campo es obligatorio"
 
             ClickableTextFieldRound:
                 id:verifypassword
                 size_hint: .75, None
-                pos_hint: {'center_x': 0.5,'center_y': 0.37}
+                pos_hint: {'center_x': 0.5,'center_y': 0.39}
                 hint_text: "Confirmar contraseña"
                 helper_text:"Este campo es obligatorio"
 
@@ -83,13 +89,13 @@ MDScreen:
                 size_hint: .75, None
                 required: True
                 input_filter:'int'
-                pos_hint: {'center_x': 0.5,'center_y': 0.28}
+                pos_hint: {'center_x': 0.5,'center_y': 0.30}
                 helper_text:"Este campo es obligatorio"
                 helper_text_mode:"on_error"
 
             MDTextField:
                 id: usertype
-                pos_hint: {'center_x': .5, 'center_y': .20}
+                pos_hint: {'center_x': .5, 'center_y': .21}
                 size_hint_x: .75
                 hint_text: "Tipo de Usuario"
                 helper_text:"Este campo es obligatorio"
@@ -108,7 +114,7 @@ MDScreen:
 
             MDTextField:
                 id:code
-                pos:(-6000,110)
+                pos:(-6000,200)
                 size_hint_x: .75
                 hint_text: "Codigo de Tutor"
                 helper_text:"Este campo es obligatorio"
@@ -125,5 +131,5 @@ MDScreen:
                 font_name:"zapf"
                 size_hint: .8, .02
                 md_bg_color: [1,0.58,0.31]
-                pos_hint: {"center_x": 0.5, "center_y": 0.03}
-                on_release:if app.save_data_signup()==True: root.manager.transition.direction="left"; root.manager.current="login";
+                pos_hint: {"center_x": 0.5, "center_y": 0.06}
+                on_release:app.save_data_signup()

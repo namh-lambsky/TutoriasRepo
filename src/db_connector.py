@@ -1,6 +1,7 @@
 import mysql.connector
 from mysql.connector import Error
 
+
 class DAO:
     def __init__(self):
         try:
@@ -206,6 +207,17 @@ class DAO:
                 sql_ins="SELECT email FROM users where email='{0}'".format(email)
                 cursor.execute(sql_ins)
                 result = cursor.fetchone()
+                return result
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+
+    def get_user_by_account_type(self, account_type):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor()
+            try:
+                sql_ins="SELECT * FROM users where account_type_id='{0}'".format(account_type)
+                cursor.execute(sql_ins)
+                result = cursor.fetchall()
                 return result
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")

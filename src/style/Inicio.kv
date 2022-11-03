@@ -9,17 +9,27 @@ MDScreen:
         elevation: 4
         md_bg_color:[0.66,0.82,0.73]
         MDFloatLayout:
-            MDIconButton:
-                pos_hint: {"center_x":.08,"center_y": .95}
-                user_font_size: "64sp"
-                icon:"arrow-left"
+            Image:
+                source: "images/logoucentral.png"
+                size_hint: 0.8, 0.8
+                pos_hint: {'center_x': 0.50,'center_y': 0.93}
+            MDRectangleFlatIconButton:
+                text: "Cerrar sesión"
+                text_color:"white"
+                icon: "logout"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [0.8,0.62,0.37]
+                pos_hint: {"center_x": 0.5, "center_y": 0.06}
                 on_release:
                     root.manager.transition.direction="left"
                     root.manager.current="main"
             MDRectangleFlatIconButton:
                 text: "Calendario"
                 text_color:"white"
-                icon: "account-key"
+                icon: "calendar-month-outline"
                 icon_color:"white"
                 line_color:(0,0,0,0)
                 font_name:"zapf"
@@ -32,7 +42,7 @@ MDScreen:
             MDRectangleFlatIconButton:
                 text: "Agendar una tutoría"
                 text_color:"white"
-                icon: "account-key"
+                icon: "application-edit-outline"
                 icon_color:"white"
                 line_color:(0,0,0,0)
                 font_name:"zapf"

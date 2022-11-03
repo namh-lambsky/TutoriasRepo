@@ -21,13 +21,13 @@ MDScreen:
                 text: "TUTORÍAS"
                 font_name:"zapf"
                 font_size:"23sp"
-                pos_hint: {'center_x':0.5,'center_y': 0.42}
+                pos_hint: {'center_x':0.5,'center_y': 0.38}
                 halign:"center"
             MDLabel:
                 text: "¡Agenda facilmente tus tutorias \nmediante esta app!"
                 font_name:"zapf"
                 font_size:"18sp"
-                pos_hint: {'center_x':0.5,'center_y': 0.36}
+                pos_hint: {'center_x':0.5,'center_y': 0.30}
                 halign:"center"
             MDRectangleFlatIconButton:
                 id:menu
@@ -39,7 +39,7 @@ MDScreen:
                 font_name:"zapf"
                 size_hint: .8, .02
                 md_bg_color: [0.42,0.64,0.54]
-                pos_hint: {"center_x": 0.5, "center_y": 0.27}
+                pos_hint: {"center_x": 0.5, "center_y": 0.17}
                 on_release:
                     root.manager.transition.direction="left"
                     root.manager.current="login"
@@ -52,7 +52,7 @@ MDScreen:
                 font_name:"zapf"
                 size_hint: .8, .02
                 md_bg_color: [1,0.58,0.31]
-                pos_hint: {"center_x": 0.5, "center_y": 0.19}
+                pos_hint: {"center_x": 0.5, "center_y": 0.09}
                 on_release:
                     root.manager.transition.direction="right"
                     root.manager.current="signup"
