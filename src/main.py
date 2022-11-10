@@ -41,12 +41,14 @@ class GUI(MDApp):
         self.career_id=None
         self.tutor_code=None
         self.dialog=None
-        self.asignatura=func.get_table(3)
+        self.asignatura=None
         self.tutor=func.get_users_by_type(2)
         self.hora=func.get_table(6)
         self.aula=func.get_table(7)
         self.carrera=func.get_table(4)
-        print(self.tutor)
+
+        self.user=None
+        self.user_name=None
 
         self.dpdown_user_type_items=[
             {
@@ -72,18 +74,8 @@ class GUI(MDApp):
                 "height": dp(56),
                 "on_release": lambda x=f"{i[1]}": self.set_item_career(x)
             }for i in self.carrera
-           
         ]
 
-        self.dpdown_subject_items=[
-            {
-                "viewclass":  "IconListItem",
-                "icon": "bookshelf",
-                "text": f"{i[1]}",
-                "height": dp(56),
-                "on_release": lambda x=f"{i[1]}": self.set_item_subject(x)
-            }for i in self.asignatura
-        ]
         self.dpdown_schedule_items=[
             {
                 "viewclass":  "IconListItem",
@@ -111,13 +103,11 @@ class GUI(MDApp):
                 "height": dp(56),
                 "on_release": lambda x=f"{i[1]}": self.set_item_aula(x)
             }for i in self.aula
-
         ]
         self.screen_manager = ScreenManager()
         self.screen_manager.add_widget(Builder.load_file("style/main.kv"))
         self.screen_manager.add_widget(Builder.load_file("style/login.kv"))
         self.screen_manager.add_widget(Builder.load_file("style/signup.kv"))
-        self.screen_manager.add_widget(Builder.load_file("style/Inicio.kv"))
         self.screen_manager.add_widget(Builder.load_file("style/agendarTutoria.kv"))
         self.menu = MDDropdownMenu(
             caller=self.screen_manager.get_screen("signup").ids.usertype,
@@ -129,13 +119,6 @@ class GUI(MDApp):
             ver_growth="up",
             hor_growth="right",
             items=self.dpdown_career_items,
-            width_mult= 8,
-        )
-        self.menu_subject = MDDropdownMenu(
-            caller=self.screen_manager.get_screen("agendarTutoria").ids.asignatura,
-            ver_growth="up",
-            hor_growth="right",
-            items=self.dpdown_subject_items,
             width_mult= 8,
         )
         self.menu_schedule = MDDropdownMenu(
@@ -160,7 +143,6 @@ class GUI(MDApp):
             width_mult= 8,
         )
         self.menu_career.bind()
-        self.menu_subject.bind()
         self.menu_tutor.bind()
         self.menu_aula.bind()
         self.menu_schedule.bind()
@@ -261,6 +243,14 @@ class GUI(MDApp):
             self.screen_manager.get_screen("signup").ids.verifypassword.helper_text="Las contraseñas no coinciden"
             self.screen_manager.get_screen("signup").ids.verifypassword.ids.text_field.error=True
 
+    def clean_signup_fields(self):
+        self.screen_manager.get_screen("signup").ids.newnombre.text=""
+        self.screen_manager.get_screen("signup").ids.newemail.text=""
+        self.screen_manager.get_screen("signup").ids.newpassword.ids.text_field.text=""
+        self.screen_manager.get_screen("signup").ids.verifypassword.ids.text_field.text=""
+        self.screen_manager.get_screen("signup").ids.cedula.text=""
+        self.screen_manager.get_screen("signup").ids.code.text=""
+
     def save_data_signup(self):
         nombre=self.screen_manager.get_screen("signup").ids.newnombre.text
         email = self.screen_manager.get_screen("signup").ids.newemail.text
@@ -275,9 +265,11 @@ class GUI(MDApp):
         if self.pass_verifier and self.id_verifier and self.email_verifier:
             if self.account_type==1:
                 func.new_user(cedula,email,verifypass1,nombre,self.account_type,career_id=self.career_id)
+                self.clean_signup_fields()
                 return True
             elif self.account_type==2:
                 func.new_user(cedula,email,verifypass1,nombre,self.account_type,tutor_c=self.tutor_code)
+                self.clean_signup_fields()
                 return True
         else:
             return False
@@ -286,6 +278,10 @@ class GUI(MDApp):
         return func.email_exists(email)
 
     #--------------Login---------------
+    def clean_login_fields(self):
+        self.screen_manager.get_screen("login").ids.emailEstablecido.text=""
+        self.screen_manager.get_screen("login").ids.passwordEstablecida.ids.text_field.text=""
+
     def verify_email_login(self):
         emailConfirmPattern=re.compile(r"^[A-Za-z0-9]+@ucentral\.edu\.co$")
         text=self.screen_manager.get_screen("login").ids.emailEstablecido.text
@@ -309,8 +305,42 @@ class GUI(MDApp):
                 self.show_alert_dialog("La contraseña no corresponde al usuario registrado!")
             else:
                 user_logged=True
+                self.load_user_data(email_log)
+            self.clean_login_fields()
         return user_logged
 
+    def load_user_data(self,email_log):
+        self.user_id=func.get_id_by_email(email_log)
+        account_type_id=func.get_account_type_id_by_id(self.user_id)
+        self.asignatura=func.get_subject_by_carrer_id(account_type_id)
+        self.user_name=func.get_name_by_id(self.user_id)
+        self.load_main_menu()
+
+
+    def load_main_menu(self):
+        self.dpdown_subject_items=[
+            {
+                "viewclass":  "IconListItem",
+                "icon": "bookshelf",
+                "text": f"{i[1]}",
+                "height": dp(56),
+                "on_release": lambda x=f"{i[1]}": self.set_item_subject(x)
+            }for i in self.asignatura
+        ]
+        self.menu_subject = MDDropdownMenu(
+            caller=self.screen_manager.get_screen("agendarTutoria").ids.asignatura,
+            ver_growth="up",
+            hor_growth="right",
+            items=self.dpdown_subject_items,
+            width_mult= 8,
+        )
+        self.screen_manager.add_widget(Builder.load_file("style/Inicio.kv"))
+        self.menu_subject.bind()
+        self.screen_manager.get_screen("inicio").ids.lbBienvenida.text = f"Bienvenido! {self.user_name}"
+
+
+    #Assign tutorships
+    
 if __name__ == "__main__":
     LabelBase.register(name="zapf",fn_regular="fonts/zapf.ttf")
     LabelBase.register(name="galliard",fn_regular="fonts/galliard-bt-bold.ttf")

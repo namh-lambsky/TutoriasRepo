@@ -1,5 +1,5 @@
 MDScreen:
-    name:"Inicio"
+    name:"inicio"
     md_bg_color: [1,0.98,0.91]
     MDCard:
         orientation: "vertical"
@@ -13,19 +13,14 @@ MDScreen:
                 source: "images/logoucentral.png"
                 size_hint: 0.8, 0.8
                 pos_hint: {'center_x': 0.50,'center_y': 0.93}
-            MDRectangleFlatIconButton:
-                text: "Cerrar sesión"
+
+            MDLabel:
+                id: lbBienvenida
+                text:"Bienvenido! "
                 text_color:"white"
-                icon: "logout"
-                icon_color:"white"
-                line_color:(0,0,0,0)
                 font_name:"zapf"
-                size_hint: .8, .02
-                md_bg_color: [0.8,0.62,0.37]
-                pos_hint: {"center_x": 0.5, "center_y": 0.06}
-                on_release:
-                    root.manager.transition.direction="left"
-                    root.manager.current="main"
+                pos_hint: {"center_x": 0.7, "center_y": 0.80}
+
             MDRectangleFlatIconButton:
                 text: "Calendario"
                 text_color:"white"
@@ -35,10 +30,11 @@ MDScreen:
                 font_name:"zapf"
                 size_hint: .8, .02
                 md_bg_color: [0.42,0.64,0.54]
-                pos_hint: {"center_x": 0.5, "center_y": 0.70}
+                pos_hint: {"center_x": 0.5, "center_y": 0.40}
                 on_release:
                     root.manager.transition.direction="left"
                     app.show_date_picker()
+
             MDRectangleFlatIconButton:
                 text: "Agendar una tutoría"
                 text_color:"white"
@@ -52,3 +48,17 @@ MDScreen:
                 on_release:
                     root.manager.transition.direction="left"
                     root.manager.current="agendarTutoria"
+
+            MDRectangleFlatIconButton:
+                text: "Cerrar sesión"
+                text_color:"white"
+                icon: "logout"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [0.8,0.62,0.37]
+                pos_hint: {"center_x": 0.5, "center_y": 0.06}
+                on_release:
+                    root.manager.transition.direction="left"
+                    root.manager.current="main"

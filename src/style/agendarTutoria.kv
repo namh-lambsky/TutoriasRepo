@@ -9,6 +9,10 @@ MDScreen:
         elevation: 4
         md_bg_color:[0.66,0.82,0.73]
         MDFloatLayout:
+            Image:
+                source: "images/logoucentral.png"
+                size_hint: 0.8, 0.8
+                pos_hint: {"center_x":.50,"center_y": 0.93}
             MDRectangleFlatIconButton:
                 text: "Cancelar"
                 text_color:"white"
@@ -21,11 +25,7 @@ MDScreen:
                 pos_hint: {"center_x": 0.5, "center_y": 0.09}
                 on_release:
                     root.manager.transition.direction="right"
-                    root.manager.current="Inicio"
-            Image:
-                source: "images/logoucentral.png"
-                size_hint: 0.8, 0.8
-                pos_hint: {"center_x":.50,"center_y": 0.93}
+                    root.manager.current="Inicio" 
             #dropbox de asignatura
             MDTextField:
                 id:asignatura
