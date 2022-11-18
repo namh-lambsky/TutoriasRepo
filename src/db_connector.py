@@ -85,13 +85,14 @@ class DAO:
                     print(f"Error al crear el dato: {e}")
             elif table == 5:
                 try:
-                    sqlInstruction = "INSERT INTO tutorships(id_subject,name,topics,teacher_email) VALUES ('{0}','{1}','{2}','{3}')"
+                    sqlInstruction = "INSERT INTO tutorships(schedule_id,subject_id,classroom_id,tutor_id ,student_id) VALUES ('{0}','{1}','{2}','{3}','{4}')"
                     cursor.execute(
                         sqlInstruction.format(
-                            obj.get_id_subject(),
-                            obj.get_name(),
-                            obj.get_topics(),
-                            obj.get_teacher_email(),
+                            obj.get_schedule_id(),
+                            obj.get_subject_id(),
+                            obj.get_classroom_id(),
+                            obj.get_tutor_id(),
+                            obj.get_student_id(),
                         )
                     )
                     self.tutorDB.commit()
@@ -189,22 +190,42 @@ class DAO:
                 except Error as e:
                     print(f"Error al intentar la conexión: {e}")
 
-    def get_password_by_email(self, email):
+    def get_email(self, email):
         if self.tutorDB.is_connected():
-            cursor = self.tutorDB.cursor()
+            cursor = self.tutorDB.cursor(buffered=True)
             try:
-                sql_ins = "SELECT password FROM users where email='{0}'".format(email)
+                sql_ins = "SELECT email FROM users where email='{0}'".format(email)
                 cursor.execute(sql_ins)
                 result = cursor.fetchone()
                 return result
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
 
-    def get_email(self, email):
+    def get_user_by_email(self, email):
         if self.tutorDB.is_connected():
             cursor = self.tutorDB.cursor(buffered=True)
             try:
-                sql_ins = "SELECT email FROM users where email='{0}'".format(email)
+                sql_ins = "SELECT user_id, email, password, name, account_type_id FROM users WHERE email='{0}'".format(
+                    email
+                )
+                cursor.execute(sql_ins)
+                return dict(
+                    zip(
+                        ("user_id", "email", "password", "name", "account_type_id"),
+                        cursor.fetchone(),
+                    )
+                )
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+                return None
+
+    def get_career_by_user_id(self, id):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor(buffered=True)
+            try:
+                sql_ins = (
+                    "SELECT career_id FROM students where student_id='{0}'".format(id)
+                )
                 cursor.execute(sql_ins)
                 result = cursor.fetchone()
                 return result
@@ -224,34 +245,47 @@ class DAO:
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
 
-    def get_account_type_id_by_user_id(self,user_id):
+    def get_tutorship(self, id_tutorship):
         if self.tutorDB.is_connected():
             cursor = self.tutorDB.cursor(buffered=True)
             try:
-                sql_ins = f"SELECT account_type_id FROM users where user_id='{user_id}'"
+                sql_ins = "SELECT * FROM tutorships where tutorship_id='{0}'".format(
+                    id_tutorship
+                )
                 cursor.execute(sql_ins)
-                result = cursor.fetchone()
-                return result
+                return dict(
+                    zip(
+                        (
+                            "tutorship_id",
+                            "schedule_id",
+                            "subject_id",
+                            "classroom_id",
+                            "tutor_id",
+                            "student_id",
+                        ),
+                        cursor.fetchone(),
+                    )
+                )
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
 
-    def get_career_id_by_user_id(self,user_id):
-        if self.tutorDB.is_connected():
-            cursor = self.tutorDB.cursor(buffered=True)
-            try:
-                sql_ins = f"SELECT career_id FROM users where user_id='{user_id}'"
-                cursor.execute(sql_ins)
-                result = cursor.fetchone()
-                return result
-            except Error as e:
-                print(f"Error al intentar la conexión: {e}")
-
-    def get_subject_by_carrer_id(self, carrer_id):
+    def get_subjects_by_career_id(self, id):
         if self.tutorDB.is_connected():
             cursor = self.tutorDB.cursor()
             try:
-                sql_ins = "SELECT * FROM subjects where career_id='{0}'".format(
-                    carrer_id
+                sql_ins = "SELECT * FROM subjects where career_id='{0}'".format(id)
+                cursor.execute(sql_ins)
+                result = cursor.fetchall()
+                return result
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+
+    def get_schedule_by_tutor_id(self, id):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor()
+            try:
+                sql_ins = "SELECT * FROM tutor_subject_schedule_bridge where tutor_id='{0}'".format(
+                    id
                 )
                 cursor.execute(sql_ins)
                 result = cursor.fetchall()
@@ -259,26 +293,162 @@ class DAO:
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
 
-    def get_id_by_email(self, email):
+    def get_tutor_by_subject_id(self, id):
         if self.tutorDB.is_connected():
-            cursor = self.tutorDB.cursor(buffered=True)
+            cursor = self.tutorDB.cursor()
             try:
-                sql_ins = "SELECT user_id FROM users where email='{0}'".format(email)
+                sql_ins = "SELECT tutor_id FROM tutor_subject_schedule_bridge where subject_id='{0}'".format(
+                    id
+                )
                 cursor.execute(sql_ins)
-                result = cursor.fetchone()
+                result = cursor.fetchall()
                 return result
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
-    def get_name_by_id(self, id):
+
+    def get_user_by_id(self,id):
         if self.tutorDB.is_connected():
             cursor = self.tutorDB.cursor(buffered=True)
             try:
-                sql_ins = "SELECT name FROM users where user_id='{0}'".format(id)
+                sql_ins = "SELECT user_id, email, password, name, account_type_id FROM users WHERE user_id='{0}'".format(
+                    id
+                )
                 cursor.execute(sql_ins)
-                result = cursor.fetchone()
+                return dict(
+                    zip(
+                        ("user_id", "email", "password", "name", "account_type_id"),
+                        cursor.fetchone(),
+                    )
+                )
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+                return None
+
+    def get_subject_by_id(self,id):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor(buffered=True)
+            try:
+                sql_ins = "SELECT subject_id, name, career_id FROM subjects WHERE subject_id='{0}'".format(
+                    id
+                )
+                cursor.execute(sql_ins)
+                return dict(
+                    zip(
+                        ("subject_id", "name", "career_id"),
+                        cursor.fetchone(),
+                    )
+                )
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+                return None
+
+    def get_tutor_by_subject_id_inner(self, id):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor()
+            try:
+                sql_ins = """
+                    SELECT u.user_id, email, password, name, account_type_id
+                    FROM tutor_subject_schedule_bridge tssb
+                            LEFT JOIN users u ON u.user_id = tssb.tutor_id
+                    WHERE tssb.subject_id = {0}
+                """.format(
+                    id
+                )
+                cursor.execute(sql_ins)
+                return map(
+                    lambda t: dict(
+                        zip(
+                            ("user_id", "email", "password", "name", "account_type_id"),
+                            t,
+                        )
+                    ),
+                    cursor.fetchall(),
+                )
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+
+    def get_schedule_by_id(self,id):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor(buffered=True)
+            try:
+                sql_ins = "SELECT schedule_id, init_time, end_time, day FROM schedule WHERE schedule_id='{0}'".format(
+                    id
+                )
+                cursor.execute(sql_ins)
+                return dict(
+                    zip(
+                        ("schedule_id", "init_time", "end_time","day"),
+                        cursor.fetchone(),
+                    )
+                )
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+                return None
+
+    def get_classroom_by_id(self,id):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor(buffered=True)
+            try:
+                sql_ins = "SELECT id_classroom, classroom_name FROM classrooms WHERE id_classroom='{0}'".format(
+                    id
+                )
+                cursor.execute(sql_ins)
+                return dict(
+                    zip(
+                        ("id_classroom", "classroom_name"),
+                        cursor.fetchone(),
+                    )
+                )
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+                return None
+
+    def get_schedule_by_subject_and_tutor(self, subject_id, tutor_id):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor()
+            try:
+                sql_ins = """
+                    SELECT s.schedule_id, init_time, end_time, day
+                    FROM tutor_subject_schedule_bridge tssb
+                            LEFT JOIN schedule s on tssb.schedule_id = s.schedule_id
+                    WHERE tssb.subject_id = {0}
+                    AND tssb.tutor_id = {1}
+                """.format(
+                    subject_id, tutor_id
+                )
+                cursor.execute(sql_ins)
+                return map(
+                    lambda t: dict(
+                        zip(("schedule_id", "init_time", "end_time", "day"), t)
+                    ),
+                    cursor.fetchall(),
+                )
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+
+    def get_last_tutorship(self):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor(buffered=True)
+            try:
+                sql_ins = "SELECT * FROM tutorships WHERE tutorship_id=(SELECT max(tutorship_id) FROM tutorships);"
+                cursor.execute(sql_ins)
+                result = dict(
+                        zip(
+                            (
+                                "tutorship_id",
+                                "schedule_id",
+                                "subject_id",
+                                "classroom_id",
+                                "tutor_id",
+                                "student_id",
+                            )
+                            ,cursor.fetchone()
+                        )
+                    )
                 return result
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
+
     # ------------------------------------------Función Update-------------------------------------
     def updateData(self, table, obj):
         if self.tutorDB.is_connected():
@@ -403,7 +573,7 @@ class DAO:
                 id_type = "id_subject"
             elif table == 5:
                 tableS = "tutorships"
-                id_type = "id_tutorship"
+                id_type = "tutorship_id"
             elif table == 6:
                 tableS = "schedule"
                 id_type = "id_schedule"
@@ -411,9 +581,9 @@ class DAO:
                 tableS = "classrooms"
                 id_type = "id_classroom"
             try:
-                sqlInstruction = "DELETE FROM '{0}' WHERE '{1}' = '{2}' "
+                sqlInstruction = "DELETE FROM {0} WHERE {1} = '{2}' "
                 cursor.execute(sqlInstruction.format(tableS, id_type, id))
                 self.tutorDB.commit()
-                print("¡Cliente eliminado con exito!")
+                print(f"Borro de la tabla{tableS} dato{id_type}={id}")
             except Error as e:
                 print(f"Error al actualizar el dato: {e}")

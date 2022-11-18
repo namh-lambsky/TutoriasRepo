@@ -77,8 +77,8 @@ MDScreen:
                 font_name:"zapf"
                 size_hint: .8, .02
                 md_bg_color: [1,0.58,0.31]
-                pos_hint: {"center_x": 0.5, "center_y": 0.25}
-                on_release: if app.save_data_login()==True: root.manager.transition.direction="left"; root.manager.current="inicio";
+                pos_hint: {"center_x": 0.5, "center_y": 0.20}
+                on_release: app.save_data_login()
             MDRectangleFlatIconButton:
                 text: "Recordar contraseña"
                 text_color:"white"

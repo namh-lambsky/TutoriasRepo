@@ -9,10 +9,6 @@ MDScreen:
         elevation: 4
         md_bg_color:[0.66,0.82,0.73]
         MDFloatLayout:
-            Image:
-                source: "images/logoucentral.png"
-                size_hint: 0.8, 0.8
-                pos_hint: {"center_x":.50,"center_y": 0.93}
             MDRectangleFlatIconButton:
                 text: "Cancelar"
                 text_color:"white"
@@ -25,36 +21,41 @@ MDScreen:
                 pos_hint: {"center_x": 0.5, "center_y": 0.09}
                 on_release:
                     root.manager.transition.direction="right"
-                    root.manager.current="Inicio" 
-            #dropbox de asignatura
+                    root.manager.current="Inicio"
+            Image:
+                source: "images/logoucentral.png"
+                size_hint: 0.8, 0.8
+                pos_hint: {"center_x":.50,"center_y": 0.93}
+
             MDTextField:
                 id:asignatura
-                pos_hint: {'center_x': .5, 'center_y': .70}
+                pos:(60,600)
                 size_hint_x: .75
                 hint_text: "Asignatura"
                 on_focus: if self.focus: app.menu_subject.open()
-            MDTextField:
-                id:schedule
-                pos_hint: {'center_x': .5, 'center_y': .60}
-                size_hint_x: .75
-                hint_text: "Horarios"
-                on_focus: if self.focus: app.menu_schedule.open()
-            
-            #dropbox tutor
+
             MDTextField:
                 id: tutor
-                pos_hint: {'center_x': .5, 'center_y': .50}
+                pos:(-6000,200)
                 size_hint_x: .75
                 hint_text: "Tutor"
                 on_focus: if self.focus: app.menu_tutor.open()
 
             MDTextField:
+                id:schedule
+                pos:(-6000,200)
+                size_hint_x: .75
+                hint_text: "Horario"
+                on_focus: if self.focus: app.menu_schedule.open()
+
+            MDTextField:
                 id: aula
-                pos_hint: {'center_x': .5, 'center_y': .4}
+                pos:(-6000,200)
                 size_hint_x: .75
                 hint_text: "Aula"
                 on_focus: if self.focus: app.menu_aula.open()
             MDRectangleFlatIconButton:
+                id:confirmtutoria
                 text: "Confirmar tutoría"
                 text_color:"white"
                 icon: "notebook-check-outline"
@@ -64,6 +65,4 @@ MDScreen:
                 size_hint: .8, .02
                 md_bg_color: [0.42,0.64,0.54]
                 pos_hint: {"center_x": 0.5, "center_y": 0.15}
-                on_release:
-                    root.manager.transition.direction="right"
-                    root.manager.current="Inicio"
+                on_release:app.create_tutorship()

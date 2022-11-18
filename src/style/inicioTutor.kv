@@ -1,5 +1,5 @@
 MDScreen:
-    name:"Inicio"
+    name:"InicioTutor"
     md_bg_color: [1,0.98,0.91]
     MDCard:
         orientation: "vertical"
@@ -13,33 +13,6 @@ MDScreen:
                 source: "images/logoucentral.png"
                 size_hint: 0.8, 0.8
                 pos_hint: {'center_x': 0.50,'center_y': 0.93}
-            MDLabel:
-                text:"Bienvenido!"
-                text_color:"white"
-                font_name:"zapf"
-                pos_hint: {"center_x": 0.7, "center_y": 0.80}
-
-            MDLabel:
-                id: lbBienvenida
-                text:""
-                text_color:"white"
-                font_name:"zapf"
-                pos_hint: {"center_x": 0.5, "center_y": 0.75}
-
-            MDRectangleFlatIconButton:
-                text: "Agendar una tutoría"
-                text_color:"white"
-                icon: "application-edit-outline"
-                icon_color:"white"
-                line_color:(0,0,0,0)
-                font_name:"zapf"
-                size_hint: .8, .02
-                md_bg_color: [0.42,0.64,0.54]
-                pos_hint: {"center_x": 0.5, "center_y": 0.27}
-                on_release:
-                    root.manager.transition.direction="left"
-                    root.manager.current="agendarTutoria"
-
             MDRectangleFlatIconButton:
                 text: "Cerrar sesión"
                 text_color:"white"
@@ -53,4 +26,14 @@ MDScreen:
                 on_release:
                     root.manager.transition.direction="left"
                     root.manager.current="main"
-
+            MDRectangleFlatIconButton:
+                text: "Cancelar tutoría"
+                text_color:"white"
+                icon: "logout"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [0.8,0.62,0.37]
+                pos_hint: {"center_x": 0.5, "center_y": 0.1}
+                # on_release:app.summary_tutorship()

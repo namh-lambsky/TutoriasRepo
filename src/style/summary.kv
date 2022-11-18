@@ -1,0 +1,49 @@
+<MD3Card>
+    padding: 4
+    size_hint: .7, .4
+    size: "200dp", "100dp"
+    MDRelativeLayout:
+        MDIconButton:
+            icon: "trash-can"
+            pos_hint: {"top": 1, "right": 1}
+            on_release:app.delete_tutorship()
+
+        MDLabel:
+            id: summarycard
+            text: root.text
+            adaptive_size: True
+            color: "grey"
+            pos: "12dp", "12dp"
+            bold: True
+            text_color:"#000000"
+            pos_hint: {"center_x": .4, "center_y": .5}
+
+MDScreen:
+    name:"summary"
+    md_bg_color: [1,0.98,0.91]
+
+    MDCard:
+        orientation: "vertical"
+        padding: 0, 0, 0 , "36dp"
+        size_hint: .95, .95
+        pos_hint: {"center_x": .5, "center_y": .5}
+        elevation: 4
+        md_bg_color:[0.66,0.82,0.73]
+        MDFloatLayout:
+            Image:
+                source: "images/logoucentral.png"
+                size_hint: 0.8, 0.8
+                pos_hint: {'center_x': 0.50,'center_y': 0.93}
+            MDRectangleFlatIconButton:
+                text: "Aceptar"
+                text_color:"white"
+                icon: "application-edit-outline"
+                icon_color:"white"
+                line_color:(0,0,0,0)
+                font_name:"zapf"
+                size_hint: .8, .02
+                md_bg_color: [0.42,0.64,0.54]
+                pos_hint: {"center_x": 0.5, "center_y": 0.1}
+                on_release:
+                    root.manager.transition.direction="left"
+                    root.manager.current="Inicio"
