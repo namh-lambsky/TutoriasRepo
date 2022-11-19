@@ -23,6 +23,7 @@ class ClickableTextFieldRound(MDRelativeLayout):
     hint_text = StringProperty()
     helper_text = StringProperty()
 
+
 class MD3Card(MDCard):
     text = StringProperty()
 
@@ -44,6 +45,7 @@ class GUI(MDApp):
         self.tutor_code = None
         self.dialog = None
         self.carrera = func.get_table(4)
+        self.user_id_del = None
 
         self.dpdown_user_type_items = [
             {
@@ -76,7 +78,6 @@ class GUI(MDApp):
         self.screen_manager.add_widget(Builder.load_file("style/main.kv"))
         self.screen_manager.add_widget(Builder.load_file("style/login.kv"))
         self.screen_manager.add_widget(Builder.load_file("style/signup.kv"))
-        self.screen_manager.add_widget(Builder.load_file("style/inicioTutor.kv"))
         self.menu = MDDropdownMenu(
             caller=self.screen_manager.get_screen("signup").ids.usertype,
             items=self.dpdown_user_type_items,
@@ -121,7 +122,7 @@ class GUI(MDApp):
 
     def set_item_career(self, text_item):
         self.screen_manager.get_screen("signup").ids.career_list.text = text_item
-        self.career_id= None
+        self.career_id = None
         if text_item == "Ingeniería de Sistemas":
             self.career_id = 1
         elif text_item == "Ingeniería Electrónica":
@@ -290,6 +291,7 @@ class GUI(MDApp):
                     self.clear_login()
                     print(self.user)
                 else:
+                    self.load_main_menu_tutors()
                     self.screen_manager.current = "InicioTutor"
                     self.clear_login()
 
@@ -426,28 +428,40 @@ class GUI(MDApp):
 
     def load_summary(self, id):
         self.screen_manager.add_widget(Builder.load_file("style/summary.kv"))
-        data_tutorship=func.get_tutorship(id)
-        schedule=func.get_schedule_by_id(data_tutorship['schedule_id'])
-        subject=func.get_subject_by_id(data_tutorship['subject_id'])
-        classroom=func.get_classroom_by_id(data_tutorship['classroom_id'])
-        tutor=func.get_user_by_id(data_tutorship['tutor_id'])
-
-        self.screen_manager.get_screen("summary").add_widget(MD3Card(
-            line_color=(0.2, 0.2, 0.2, 0.8),
-            style="filled",
-            md_bg_color= "#FFFBEA",
-            pos_hint= {'center_x': 0.50,'center_y': 0.50},
-            text=f"""
+        data_tutorship = func.get_tutorship(id)
+        schedule = func.get_schedule_by_id(data_tutorship["schedule_id"])
+        subject = func.get_subject_by_id(data_tutorship["subject_id"])
+        classroom = func.get_classroom_by_id(data_tutorship["classroom_id"])
+        tutor = func.get_user_by_id(data_tutorship["tutor_id"])
+        self.user_id_del = id
+        self.screen_manager.get_screen("summary").add_widget(
+            MD3Card(
+                line_color=(0.2, 0.2, 0.2, 0.8),
+                style="filled",
+                md_bg_color="#FFFBEA",
+                pos_hint={"center_x": 0.50, "center_y": 0.50},
+                text=f"""
             Materia: {subject['name']}
             Salon: {classroom['classroom_name']}
             Horario: {schedule['day']} {schedule['init_time']} - {schedule['end_time']}
             Tutor: {tutor['name']}
-            """))
-    def delete_tutorship(self):
-        func.delete_by_id(5,self.summary_id)
-        self.screen_manager.transition.direction = "left"
-        self.screen_manager.current = "Inicio"       
+            """,
+            )
+        )
 
+    def delete_summary(self):
+        self.delete_tutorship()
+        self.screen_manager.transition.direction = "left"
+        self.screen_manager.current = "Inicio"
+
+    def delete_tutor(self):
+        self.delete_tutorship()
+        self.screen_manager.transition.direction = "left"
+        self.screen_manager.current = "InicioTutor"
+
+    def delete_tutorship(self):
+        print("ola", self.user_id_del)
+        func.delete_by_id(5, self.user_id_del)
 
     def create_tutorship(self):
         a = self.selected_spot["schedule_id"]
@@ -463,18 +477,31 @@ class GUI(MDApp):
         self.screen_manager.transition.direction = "left"
         self.screen_manager.current = "summary"
 
-# Resumen Tutoría
-# def summary_tutorship(self):
-#     if self.verifier(?:
-#       ids=func.get_tutorship(id_tutorship)
-#       if ids==True:
-#           self.screen_manager.current = "Inicio"
-#       else:
-#           self.show_alert_dialog("La tutoría no se agendó con éxito")
-
-# -----Inicio tutor----
-# def build(self):
-#     return Builder.load_string("inicioTutor")
+    # Menu Tutores
+    def load_main_menu_tutors(self):
+        self.screen_manager.add_widget(Builder.load_file("style/inicioTutor.kv"))
+        tutorships_by_tutor = func.get_tutorship_by_tutor_id(self.user["user_id"])
+        box = self.screen_manager.get_screen("InicioTutor").ids.box
+        for tutorship in list(tutorships_by_tutor):
+            schedule = func.get_schedule_by_id(tutorship["schedule_id"])
+            subject = func.get_subject_by_id(tutorship["subject_id"])
+            classroom = func.get_classroom_by_id(tutorship["classroom_id"])
+            student = func.get_user_by_id(tutorship["student_id"])
+            self.user_id_del = tutorship["tutorship_id"]
+            box.add_widget(
+                MD3Card(
+                    line_color=(0.2, 0.2, 0.2, 0.8),
+                    style="filled",
+                    md_bg_color="#FFFBEA",
+                    text=f"""
+                Codigo: {tutorship["tutorship_id"]}
+                Materia: {subject['name']}
+                Salon: {classroom['classroom_name']}
+                Horario: {schedule['day']} {schedule['init_time']} - {schedule['end_time']}
+                Estudiante: {student['name']}
+                """,
+                )
+            )
 
 
 if __name__ == "__main__":

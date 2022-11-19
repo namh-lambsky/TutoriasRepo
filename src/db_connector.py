@@ -306,7 +306,7 @@ class DAO:
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
 
-    def get_user_by_id(self,id):
+    def get_user_by_id(self, id):
         if self.tutorDB.is_connected():
             cursor = self.tutorDB.cursor(buffered=True)
             try:
@@ -324,7 +324,7 @@ class DAO:
                 print(f"Error al intentar la conexión: {e}")
                 return None
 
-    def get_subject_by_id(self,id):
+    def get_subject_by_id(self, id):
         if self.tutorDB.is_connected():
             cursor = self.tutorDB.cursor(buffered=True)
             try:
@@ -367,7 +367,7 @@ class DAO:
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
 
-    def get_schedule_by_id(self,id):
+    def get_schedule_by_id(self, id):
         if self.tutorDB.is_connected():
             cursor = self.tutorDB.cursor(buffered=True)
             try:
@@ -377,7 +377,7 @@ class DAO:
                 cursor.execute(sql_ins)
                 return dict(
                     zip(
-                        ("schedule_id", "init_time", "end_time","day"),
+                        ("schedule_id", "init_time", "end_time", "day"),
                         cursor.fetchone(),
                     )
                 )
@@ -385,7 +385,7 @@ class DAO:
                 print(f"Error al intentar la conexión: {e}")
                 return None
 
-    def get_classroom_by_id(self,id):
+    def get_classroom_by_id(self, id):
         if self.tutorDB.is_connected():
             cursor = self.tutorDB.cursor(buffered=True)
             try:
@@ -433,6 +433,34 @@ class DAO:
                 sql_ins = "SELECT * FROM tutorships WHERE tutorship_id=(SELECT max(tutorship_id) FROM tutorships);"
                 cursor.execute(sql_ins)
                 result = dict(
+                    zip(
+                        (
+                            "tutorship_id",
+                            "schedule_id",
+                            "subject_id",
+                            "classroom_id",
+                            "tutor_id",
+                            "student_id",
+                        ),
+                        cursor.fetchone(),
+                    )
+                )
+                return result
+            except Error as e:
+                print(f"Error al intentar la conexión: {e}")
+
+    def get_tutorship_by_tutor_id(self, tutor_id):
+        if self.tutorDB.is_connected():
+            cursor = self.tutorDB.cursor()
+            try:
+                sql_ins = """
+                    SELECT * FROM tutorships WHERE tutor_id={0}
+                """.format(
+                    tutor_id
+                )
+                cursor.execute(sql_ins)
+                return map(
+                    lambda t: dict(
                         zip(
                             (
                                 "tutorship_id",
@@ -441,11 +469,12 @@ class DAO:
                                 "classroom_id",
                                 "tutor_id",
                                 "student_id",
-                            )
-                            ,cursor.fetchone()
+                            ),
+                            t,
                         )
-                    )
-                return result
+                    ),
+                    cursor.fetchall(),
+                )
             except Error as e:
                 print(f"Error al intentar la conexión: {e}")
 

@@ -1,3 +1,25 @@
+<MD3Card>
+    padding: 2
+    size_hint: .8, .6
+    MDRelativeLayout:
+        MDIconButton:
+            icon: "trash-can"
+            pos_hint: {"top": 1, "right": 1}
+            on_release:app.delete_tutorship()
+
+        MDLabel:
+            id: tutorTutorships
+            hallign: "center"
+            text: root.text
+            adaptive_height: True
+            adaptative_width:True
+            color: "grey"
+            pos: "12dp", "12dp"
+            bold: True
+            text_color:"#000000"
+            pos_hint: {"center_x": .5, "center_y": .5}
+
+
 MDScreen:
     name:"InicioTutor"
     md_bg_color: [1,0.98,0.91]
@@ -9,31 +31,13 @@ MDScreen:
         elevation: 4
         md_bg_color:[0.66,0.82,0.73]
         MDFloatLayout:
+
             Image:
                 source: "images/logoucentral.png"
                 size_hint: 0.8, 0.8
                 pos_hint: {'center_x': 0.50,'center_y': 0.93}
-            MDRectangleFlatIconButton:
-                text: "Cerrar sesión"
-                text_color:"white"
-                icon: "logout"
-                icon_color:"white"
-                line_color:(0,0,0,0)
-                font_name:"zapf"
-                size_hint: .8, .02
-                md_bg_color: [0.8,0.62,0.37]
-                pos_hint: {"center_x": 0.5, "center_y": 0.06}
-                on_release:
-                    root.manager.transition.direction="left"
-                    root.manager.current="main"
-            MDRectangleFlatIconButton:
-                text: "Cancelar tutoría"
-                text_color:"white"
-                icon: "logout"
-                icon_color:"white"
-                line_color:(0,0,0,0)
-                font_name:"zapf"
-                size_hint: .8, .02
-                md_bg_color: [0.8,0.62,0.37]
-                pos_hint: {"center_x": 0.5, "center_y": 0.1}
-                # on_release:app.summary_tutorship()
+
+            MDBoxLayout:
+                id:box
+                orientation: 'vertical'
+                pos_hint: {'center_x': 0.6,'center_y': 0.3}
